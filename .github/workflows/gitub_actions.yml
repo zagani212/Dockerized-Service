@@ -21,5 +21,13 @@ jobs:
     needs: build_and_deploy_docker_image
     runs-on: ubuntu-latest
     steps: 
-      - run: docker pull ${{ secrets.DOCKERHUB_USERNAME }}/dockerized-service:latest
-      - run: docker run --name mycontainer -d ${{ secrets.DOCKERHUB_USERNAME }}/dockerized-service:latest
+      - name: Pull and run container
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          port: ${{ secrets.PORT }}
+          script: |
+            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/dockerized-service:latest
+            docker run --name mycontainer -d ${{ secrets.DOCKERHUB_USERNAME }}/dockerized-service:latest
