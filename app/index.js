@@ -3,6 +3,11 @@ const express = require('express')
 const app = express()
 const port = process.env.PORT | 3000
 
+console.log(process.env.PORT)
+console.log(process.env.USERNAME)
+console.log(process.env.PASSWORD)
+console.log(process.env.SECRET_MESSAGE)
+
 function authentication(req, res, next) {
     const authheader = req.headers.authorization;
 

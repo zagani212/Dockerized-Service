@@ -3,7 +3,7 @@ services:
     image: abdelhak245/dockerized-service:latest
     environment: # Create a .env file in /home/your-user and set env vars like .env.example
       - SECRET_MESSAGE={SECRET_MESSAGE}
-      - USERNAME=={USERNAME}
-      - PASSWORD=={PASSWORD}
+      - USERNAME={USERNAME}
+      - PASSWORD={PASSWORD}
     ports:
       - "80:3000"
