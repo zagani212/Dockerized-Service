@@ -18,6 +18,8 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/dockerized-service:${{ github.sha }}
   run_container:
+    needs: build_and_deploy_docker_image
     runs-on: ubuntu-latest
     steps: 
+      - run: docker pull ${{ secrets.DOCKERHUB_USERNAME }}/dockerized-service:latest
       - run: docker run --name mycontainer -d ${{ secrets.DOCKERHUB_USERNAME }}/dockerized-service:latest
