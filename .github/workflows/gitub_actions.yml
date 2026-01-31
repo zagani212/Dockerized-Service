@@ -1,7 +1,7 @@
 name: Dockerized Service
 on: [push]
 jobs:
-  Build_and_Deploy_docker_image:
+  build_and_deploy_docker_image:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -17,5 +17,7 @@ jobs:
           context: "{{defaultContext}}:app"
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/dockerized-service:${{ github.sha }}
-    
-
+  run_container:
+    runs-on: ubuntu-latest
+    steps: 
+      - run: docker run --name mycontainer -d ${{ secrets.DOCKERHUB_USERNAME }}/dockerized-service:latest
