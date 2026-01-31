@@ -6,6 +6,15 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
+      - name: Copy docker compose file
+        uses: appleboy/scp-action@v1
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          port: ${{ secrets.PORT }}
+          source: "docker-compose.yml"
+          target: docker-compose.yml
       - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
@@ -16,7 +25,9 @@ jobs:
         with:
           context: "{{defaultContext}}:app"
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/dockerized-service:${{ github.sha }}
+          tags: | 
+            ${{ secrets.DOCKERHUB_USERNAME }}/dockerized-service:${{ github.sha }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/dockerized-service:latest
   run_container:
     needs: build_and_deploy_docker_image
     runs-on: ubuntu-latest
@@ -28,6 +39,4 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.KEY }}
           port: ${{ secrets.PORT }}
-          script: |
-            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/dockerized-service:${{ github.sha }}
-            docker run --name mycontainer -d ${{ secrets.DOCKERHUB_USERNAME }}/dockerized-service:${{ github.sha }}
+          script: docker compose up
